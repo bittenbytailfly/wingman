@@ -45,29 +45,23 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
 
         public ActionResult Square(int quality, int size, string path, string originalExtension = null)
         {
-            var fileExtension = Path.GetExtension(path);
-            var derivedFileName = "square_" + size + fileExtension;
             var manipulation = new SquareManipulation(size, quality);
-
-            return this.ServeManipulatedImage(path, derivedFileName, originalExtension, manipulation);
+            return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
         public ActionResult ResizeToWidth(int quality, int width, string path, string originalExtension = null)
         {
-            var fileExtension = Path.GetExtension(path);
-            var derivedFileName = "resize_w_" + width + fileExtension;
             var manipulation = new ResizeToWidthManipulation(width, quality);
-
-            return this.ServeManipulatedImage(path, derivedFileName, originalExtension, manipulation);
+            return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
         #region Helper Methods
 
-        public ActionResult ServeManipulatedImage(string relativePath, string derivedFileName, string originalExtension, Manipulation imageManipulation)
+        public ActionResult ServeManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
         {
             try
             {
-                var derivedImage = this.Service.DeriveManipulatedImage(relativePath, derivedFileName, originalExtension, imageManipulation);
+                var derivedImage = this.Service.DeriveManipulatedImage(relativePath, originalExtension, imageManipulation);
                 return base.File(derivedImage.FilePath, derivedImage.MimeType);
             }
             catch (FileNotFoundException ex)

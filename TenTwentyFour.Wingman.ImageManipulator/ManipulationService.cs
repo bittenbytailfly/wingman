@@ -20,8 +20,10 @@ namespace TenTwentyFour.Wingman.ImageManipulator
             this.DerivedDirectory = derivedDirectory;
         }
 
-        public ImageDetail DeriveManipulatedImage(string relativePath, string derivedFileName, string originalExtension, Manipulation imageManipulation)
+        public ImageDetail DeriveManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
         {
+            var derivedFileName = imageManipulation.GetDerivedFileName(relativePath);
+
             if (originalExtension != null)
             {
                 relativePath = ReplaceExtension(relativePath, originalExtension);

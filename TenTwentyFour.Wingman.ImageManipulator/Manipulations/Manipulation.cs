@@ -15,8 +15,13 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
     public abstract class Manipulation
     {
         public int Quality { get; set; }
-
+        
         public abstract void Manipulate(string sourceFilePath, string destinationFilePath);
+
+        /// <summary>
+        /// Recommended to use Manipulation name + properties (e.g. "square_200")
+        /// </summary>
+        protected abstract string ManipulatedFileNameWithoutExtension { get; }
 
         public Manipulation(int quality)
         {
@@ -30,6 +35,12 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
             {
                 ResizeImage(inStream, destinationFilePath, size, mode);
             }
+        }
+
+        public string GetDerivedFileName(string filePath)
+        {
+            var fileExtension = Path.GetExtension(filePath);
+            return $"{this.ManipulatedFileNameWithoutExtension}_q{this.Quality}{fileExtension}";
         }
 
         #region Helper Methods

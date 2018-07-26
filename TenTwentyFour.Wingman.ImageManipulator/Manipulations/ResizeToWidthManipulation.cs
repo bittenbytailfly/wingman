@@ -17,6 +17,8 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
             this.Width = width;
         }
 
+        protected override string ManipulatedFileNameWithoutExtension => "resizetowidth" + this.Width;
+
         public override void Manipulate(string sourceFilePath, string destinationFilePath)
         {
             base.ResizeImage(sourceFilePath, destinationFilePath, new Size(this.Width, 0), ResizeMode.Max);
