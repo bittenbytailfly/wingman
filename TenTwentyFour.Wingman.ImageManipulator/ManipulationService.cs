@@ -23,13 +23,13 @@ namespace TenTwentyFour.Wingman.ImageManipulator
         public ImageDetail DeriveManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
         {
             var derivedFileName = imageManipulation.GetDerivedFileName(relativePath);
+            var mimeType = GetMimeType(Path.GetExtension(relativePath));
 
             if (originalExtension != null)
             {
                 relativePath = ReplaceExtension(relativePath, originalExtension);
             }
-
-            var mimeType = GetMimeType(Path.GetExtension(relativePath));
+            
             var originPath = Path.Combine(this.SourceDirectory, relativePath);
             if (System.IO.File.Exists(originPath))
             {
