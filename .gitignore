@@ -328,3 +328,5 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+TenTwentyFour.Wingman.UserInterface/Web.Debug.config
+TenTwentyFour.Wingman.UserInterface/Web.Release.config
