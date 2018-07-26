@@ -83,7 +83,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator
                 case ".gif":
                     return "image/gif";
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return "application/octet-stream";
             }
         }
 

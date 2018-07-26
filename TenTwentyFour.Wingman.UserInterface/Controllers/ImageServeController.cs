@@ -31,6 +31,11 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
 
         public ActionResult Plain(string path)
         {
+            if (String.IsNullOrWhiteSpace(path))
+            {
+                throw new HttpException(404, "File not found");
+            }
+
             var mimeType = this.Service.GetMimeType(Path.GetExtension(path));
             var originPath = Path.Combine(this.Service.SourceDirectory, path);
 
