@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TenTwentyFour.Wingman.UserInterface", "TenTwentyFour.Wingman.UserInterface\TenTwentyFour.Wingman.UserInterface.csproj", "{29E3B054-2BC8-48D2-80BA-CDA3F6F6D8F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TenTwentyFour.Wingman.ImageManipulator", "TenTwentyFour.Wingman.ImageManipulator\TenTwentyFour.Wingman.ImageManipulator.csproj", "{B512AB06-2A29-4694-A17F-C403A6E07E88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{29E3B054-2BC8-48D2-80BA-CDA3F6F6D8F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29E3B054-2BC8-48D2-80BA-CDA3F6F6D8F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29E3B054-2BC8-48D2-80BA-CDA3F6F6D8F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B512AB06-2A29-4694-A17F-C403A6E07E88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B512AB06-2A29-4694-A17F-C403A6E07E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B512AB06-2A29-4694-A17F-C403A6E07E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B512AB06-2A29-4694-A17F-C403A6E07E88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
