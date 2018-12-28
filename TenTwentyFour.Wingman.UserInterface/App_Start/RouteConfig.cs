@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using TenTwentyFour.Wingman.UserInterface.ApplicationSettings;
 using TenTwentyFour.Wingman.UserInterface.RouteConstraints;
 
 namespace TenTwentyFour.Wingman.UserInterface
@@ -31,33 +32,47 @@ namespace TenTwentyFour.Wingman.UserInterface
 
             var maxImageSizeConstraint = new MaximumImageSizeConstraint(maxDimensionInt);
 
-            routes.MapRoute(
-                name: "Crop Square With Format Change",
-                url: "derived/square/{quality}/{originalExtension}/{size}/{*path}",
-                defaults: new { controller = "ImageServe", action = "Square" },
-                constraints: new { size = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
-            );
+            var customRouteSection = ConfigurationManager.GetSection("wingmanCustomRoutes") as WingmanRoutesConfigurationSection;
+            foreach (WingmanCustomRouteElement route in customRouteSection.CustomRoutes)
+            {
+                routes.MapRoute(
+                    name: route.Name,
+                    url: $"{route.UriRoot}/{{*path}}",
+                    defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension },
+                    constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
+                );
+            }
 
-            routes.MapRoute(
-               name: "Crop Square",
-               url: "derived/square/{quality}/{size}/{*path}",
-               defaults: new { controller = "ImageServe", action = "Square" },
-               constraints: new { size = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
-           );
+            if (!customRouteSection.DisableDefaultRouting)
+            {
+                routes.MapRoute(
+                    name: "Crop Square With Format Change",
+                    url: "derived/square/{quality}/{originalExtension}/{width}/{*path}",
+                    defaults: new { controller = "ImageServe", action = "Square" },
+                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
+                );
 
-            routes.MapRoute(
-                name: "Resize Width With Format Change",
-                url: "derived/resize-w/{quality}/{originalExtension}/{size}/{*path}",
-                defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
-                constraints: new { size = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
-            );
+                routes.MapRoute(
+                   name: "Crop Square",
+                   url: "derived/square/{quality}/{width}/{*path}",
+                   defaults: new { controller = "ImageServe", action = "Square" },
+                   constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
+               );
 
-            routes.MapRoute(
-                name: "Resize Width",
-                url: "derived/resize-w/{quality}/{size}/{*path}",
-                defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
-                constraints: new { size = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
-            );
+                routes.MapRoute(
+                    name: "Resize Width With Format Change",
+                    url: "derived/resize-w/{quality}/{originalExtension}/{width}/{*path}",
+                    defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
+                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
+                );
+
+                routes.MapRoute(
+                    name: "Resize Width",
+                    url: "derived/resize-w/{quality}/{width}/{*path}",
+                    defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
+                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
+                );
+            }
 
             routes.MapRoute(
                name: "Plain",

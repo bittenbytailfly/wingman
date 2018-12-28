@@ -102,6 +102,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationSettings\WingmanCustomRouteElement.cs" />
+    <Compile Include="ApplicationSettings\WingmanCustomRouteElementCollection.cs" />
+    <Compile Include="ApplicationSettings\WingmanRoutesConfigurationSection.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ImageServeController.cs" />

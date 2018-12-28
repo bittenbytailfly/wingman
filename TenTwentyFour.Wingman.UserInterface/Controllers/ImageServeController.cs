@@ -48,9 +48,9 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             throw new HttpException(404, "File not found");
         }
 
-        public ActionResult Square(int quality, int size, string path, string originalExtension = null)
+        public ActionResult Square(int quality, int width, string path, string originalExtension = null)
         {
-            var manipulation = new SquareManipulation(size, quality);
+            var manipulation = new SquareManipulation(width, quality);
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
