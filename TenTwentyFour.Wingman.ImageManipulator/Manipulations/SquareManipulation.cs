@@ -12,6 +12,11 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
     {
         public int Width { get; set; }
 
+        protected override string ManipulationCacheKey
+        {
+            get { return "Square_" + Width; }
+        }
+
         protected override string ManipulatedFileNameWithoutExtension => "square" + this.Width;
 
         public SquareManipulation(int width, int quality) : base(quality)

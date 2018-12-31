@@ -15,7 +15,13 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
     public abstract class Manipulation
     {
         public int Quality { get; set; }
+        protected abstract string ManipulationCacheKey { get; }
         
+        public string CacheKey
+        {
+            get { return "m_" + Quality + ManipulationCacheKey; }
+        }
+
         public abstract void Manipulate(string sourceFilePath, string destinationFilePath);
 
         /// <summary>

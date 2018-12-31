@@ -25,7 +25,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Services
 
         public async Task<ImageDetail> DeriveManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
         {
-            var cachedFile = GetCachedImageDetail(relativePath);
+            var cachedFile = GetCachedImageDetail(relativePath, imageManipulation);
             if (cachedFile != null)
             {
                 return cachedFile;
@@ -55,7 +55,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Services
 
                 if (File.Exists(newFilePath))
                 {
-                    return CacheAndReturnImageDetail(relativePath, newFilePath, mimeType);
+                    return CacheAndReturnImageDetail(relativePath, newFilePath, mimeType, imageManipulation);
                 }
 
                 if (!Directory.Exists(newFileDirectory))
@@ -65,7 +65,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Services
 
                 imageManipulation.Manipulate(originPath, newFilePath);
 
-                return CacheAndReturnImageDetail(relativePath, newFilePath, mimeType);
+                return CacheAndReturnImageDetail(relativePath, newFilePath, mimeType, imageManipulation);
             }
 
             throw new FileNotFoundException();
@@ -73,11 +73,12 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Services
 
         #region Caching
 
-        public ImageDetail GetCachedImageDetail(string relativePath)
+        public ImageDetail GetCachedImageDetail(string relativePath, Manipulation manipulation = null)
         {
-            var detail = Cache[relativePath] as ImageDetail;
+            var cacheKey = (manipulation?.CacheKey ?? "") + relativePath;
+            var detail = Cache[cacheKey] as ImageDetail;
 
-            if (Cache[relativePath] == null)
+            if (Cache[cacheKey] == null)
             {
                 return null;
             }
@@ -85,12 +86,13 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Services
             return detail;
         }
 
-        public ImageDetail CacheAndReturnImageDetail(string relativePath, string filePath, string mimeType)
+        public ImageDetail CacheAndReturnImageDetail(string relativePath, string filePath, string mimeType, Manipulation manipulation = null)
         {
+            var cacheKey = (manipulation?.CacheKey ?? "") + relativePath;
             var imageDetail = new ImageDetail(filePath, mimeType);
 
             var dependency = new CacheDependency(filePath);
-            Cache.Insert(relativePath, imageDetail, dependency);
+            Cache.Insert(cacheKey, imageDetail, dependency);
 
             return imageDetail;
         }

@@ -12,6 +12,11 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
     {
         public int Width { get; set; }
 
+        protected override string ManipulationCacheKey
+        {
+            get { return "ResizeToWidth_" + Width; }
+        }
+
         public ResizeToWidthManipulation(int width, int quality) : base(quality)
         {
             this.Width = width;
