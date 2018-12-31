@@ -44,19 +44,19 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
                 throw new HttpException(404, "File not found");
             }
 
-            var originPath = Path.Combine(this.Service.SourceDirectory, path);
-            var cachedFile = this.Service.GetCachedImageDetail(originPath);
+            var cachedFile = this.Service.GetCachedImageDetail(path);
             if (cachedFile != null)
             {
                 return base.File(cachedFile.FilePath, cachedFile.MimeType);
             }
 
+            var originPath = Path.Combine(this.Service.SourceDirectory, path);
             var mimeType = this.Service.GetMimeType(Path.GetExtension(path));
 
             if (System.IO.File.Exists(originPath))
             {
                 base.HttpContext.Response.AppendHeader("Cache-Control", "max-age=2592000");
-                var image = this.Service.CacheAndReturnImageDetail(originPath, mimeType);
+                var image = this.Service.CacheAndReturnImageDetail(path, originPath, mimeType);
                 return base.File(image.FilePath, image.MimeType);
             }
 
