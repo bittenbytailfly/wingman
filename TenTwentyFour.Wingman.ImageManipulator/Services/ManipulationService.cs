@@ -32,8 +32,8 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Services
             }
 
             var derivedFileName = imageManipulation.GetDerivedFileName(relativePath);
-            var newFileDirectory = this.DerivedDirectory + relativePath;
-            var newFilePath = newFileDirectory + derivedFileName;
+            var newFileDirectory = Path.Combine(this.DerivedDirectory, relativePath);
+            var newFilePath = Path.Combine(newFileDirectory, derivedFileName);
 
             var mimeType = GetMimeType(Path.GetExtension(relativePath));
 
