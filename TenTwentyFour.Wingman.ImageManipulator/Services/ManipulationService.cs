@@ -23,7 +23,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Services
             this.Cache = httpCache;
         }
 
-        public ImageDetail DeriveManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
+        public async Task<ImageDetail> DeriveManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
         {
             var derivedFileName = imageManipulation.GetDerivedFileName(relativePath);
             var newFileDirectory = this.DerivedDirectory + relativePath;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.SessionState;
@@ -62,25 +63,25 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             throw new HttpException(404, "File not found");
         }
 
-        public ActionResult Square(int quality, int width, string path, string originalExtension = null)
+        public async Task<ActionResult> Square(int quality, int width, string path, string originalExtension = null)
         {
             var manipulation = new SquareManipulation(width, quality);
-            return this.ServeManipulatedImage(path, originalExtension, manipulation);
+            return await this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
-        public ActionResult ResizeToWidth(int quality, int width, string path, string originalExtension = null)
+        public async Task<ActionResult> ResizeToWidth(int quality, int width, string path, string originalExtension = null)
         {
             var manipulation = new ResizeToWidthManipulation(width, quality);
-            return this.ServeManipulatedImage(path, originalExtension, manipulation);
+            return await this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
         #region Helper Methods
 
-        public ActionResult ServeManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
+        public async Task<ActionResult> ServeManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
         {
             try
             {
-                var derivedImage = this.Service.DeriveManipulatedImage(relativePath, originalExtension, imageManipulation);
+                var derivedImage = await this.Service.DeriveManipulatedImage(relativePath, originalExtension, imageManipulation);
                 return base.File(derivedImage.FilePath, derivedImage.MimeType);
             }
             catch (FileNotFoundException ex)
