@@ -5,12 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 using TenTwentyFour.Wingman.ImageManipulator;
 using TenTwentyFour.Wingman.ImageManipulator.Manipulations;
 using TenTwentyFour.Wingman.ImageManipulator.Services;
 
 namespace TenTwentyFour.Wingman.UserInterface.Controllers
 {
+    [SessionState(SessionStateBehavior.Disabled)]
     public class ImageServeController : Controller
     {
         ManipulationService Service { get; set; }
