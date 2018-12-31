@@ -26,8 +26,8 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Services
         public ImageDetail DeriveManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
         {
             var derivedFileName = imageManipulation.GetDerivedFileName(relativePath);
-            var newFileDirectory = Path.Combine(this.DerivedDirectory, relativePath);
-            var newFilePath = Path.Combine(newFileDirectory, derivedFileName);
+            var newFileDirectory = this.DerivedDirectory + relativePath;
+            var newFilePath = newFileDirectory + derivedFileName;
 
             var cachedFile = GetCachedImageDetail(newFilePath);
             if (cachedFile != null)
