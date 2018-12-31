@@ -14,7 +14,7 @@ using TenTwentyFour.Wingman.ImageManipulator.Services;
 
 namespace TenTwentyFour.Wingman.UserInterface.Controllers
 {
-    [SessionState(SessionStateBehavior.Disabled)]
+    [SessionState(SessionStateBehavior.ReadOnly)]
     public class ImageServeController : Controller
     {
         ManipulationService Service { get; set; }
