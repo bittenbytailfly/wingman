@@ -70,6 +70,7 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             return await this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
+        [OutputCache(Duration = 300, VaryByParam = "*")]
         public async Task<ActionResult> ResizeToWidth(int quality, int width, string path, string originalExtension = null)
         {
             var manipulation = new ResizeToWidthManipulation(width, quality);
