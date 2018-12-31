@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using TenTwentyFour.Wingman.ImageManipulator;
 using TenTwentyFour.Wingman.ImageManipulator.Manipulations;
+using TenTwentyFour.Wingman.ImageManipulator.Services;
 
 namespace TenTwentyFour.Wingman.UserInterface.Controllers
 {
@@ -20,12 +21,16 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
         }
 
         public ImageServeController()
-            : this(new ManipulationService(ConfigurationManager.AppSettings["SourceDirectory"], ConfigurationManager.AppSettings["DerivedDirectory"]))
-            { }
+        {
+            this.Service = new ManipulationService(ConfigurationManager.AppSettings["SourceDirectory"],
+                ConfigurationManager.AppSettings["DerivedDirectory"],
+                null);
+        }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+            this.Service.Cache = base.HttpContext.ApplicationInstance.Context.Cache;
             base.HttpContext.Response.AppendHeader("Cache-Control", "max-age=2592000");
         }
 
@@ -36,13 +41,20 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
                 throw new HttpException(404, "File not found");
             }
 
-            var mimeType = this.Service.GetMimeType(Path.GetExtension(path));
             var originPath = Path.Combine(this.Service.SourceDirectory, path);
+            var cachedFile = this.Service.GetCachedImageDetail(originPath);
+            if (cachedFile != null)
+            {
+                return base.File(cachedFile.FilePath, cachedFile.MimeType);
+            }
+
+            var mimeType = this.Service.GetMimeType(Path.GetExtension(path));
 
             if (System.IO.File.Exists(originPath))
             {
                 base.HttpContext.Response.AppendHeader("Cache-Control", "max-age=2592000");
-                return base.File(originPath, mimeType);
+                var image = this.Service.CacheAndReturnImageDetail(originPath, mimeType);
+                return base.File(image.FilePath, image.MimeType);
             }
 
             throw new HttpException(404, "File not found");

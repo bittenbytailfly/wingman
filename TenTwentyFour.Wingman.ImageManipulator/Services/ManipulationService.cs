@@ -4,25 +4,37 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Caching;
 using TenTwentyFour.Wingman.ImageManipulator.Manipulations;
 using TenTwentyFour.Wingman.ImageManipulator.Models;
 
-namespace TenTwentyFour.Wingman.ImageManipulator
+namespace TenTwentyFour.Wingman.ImageManipulator.Services
 {
     public class ManipulationService
     {
         public string SourceDirectory { get; set; }
         private string DerivedDirectory { get; set; }
+        public Cache Cache { get; set; }
 
-        public ManipulationService(string sourceDirectory, string derivedDirectory)
+        public ManipulationService(string sourceDirectory, string derivedDirectory, Cache httpCache)
         {
             this.SourceDirectory = sourceDirectory;
             this.DerivedDirectory = derivedDirectory;
+            this.Cache = httpCache;
         }
 
         public ImageDetail DeriveManipulatedImage(string relativePath, string originalExtension, Manipulation imageManipulation)
         {
             var derivedFileName = imageManipulation.GetDerivedFileName(relativePath);
+            var newFileDirectory = Path.Combine(this.DerivedDirectory, relativePath);
+            var newFilePath = Path.Combine(newFileDirectory, derivedFileName);
+
+            var cachedFile = GetCachedImageDetail(newFilePath);
+            if (cachedFile != null)
+            {
+                return cachedFile;
+            }
+
             var mimeType = GetMimeType(Path.GetExtension(relativePath));
 
             if (originalExtension != null)
@@ -33,9 +45,6 @@ namespace TenTwentyFour.Wingman.ImageManipulator
             var originPath = Path.Combine(this.SourceDirectory, relativePath);
             if (System.IO.File.Exists(originPath))
             {
-                var newFileDirectory = Path.Combine(this.DerivedDirectory, relativePath);
-                var newFilePath = Path.Combine(newFileDirectory, derivedFileName);
-
                 var derivedFolderCreated = new DirectoryInfo(newFileDirectory).CreationTime;
                 var originalFileModified = new FileInfo(originPath).LastWriteTime;
 
@@ -46,7 +55,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator
 
                 if (File.Exists(newFilePath))
                 {
-                    return new ImageDetail(newFilePath, mimeType);
+                    return CacheAndReturnImageDetail(newFilePath, mimeType);
                 }
 
                 if (!Directory.Exists(newFileDirectory))
@@ -56,11 +65,33 @@ namespace TenTwentyFour.Wingman.ImageManipulator
 
                 imageManipulation.Manipulate(originPath, newFilePath);
 
-                return new ImageDetail(newFilePath, mimeType);
+                return CacheAndReturnImageDetail(newFilePath, mimeType);
             }
 
             throw new FileNotFoundException();
         }
+
+        #region Caching
+
+        public ImageDetail GetCachedImageDetail(string filePath)
+        {
+            if (Cache[filePath] == null)
+            {
+                return null;
+            }
+
+            return new ImageDetail(filePath, Cache[filePath].ToString());
+        }
+
+        public ImageDetail CacheAndReturnImageDetail(string filePath, string mimeType)
+        {
+            var dependency = new CacheDependency(filePath);
+            Cache.Insert(filePath, mimeType, dependency);
+
+            return new ImageDetail(filePath, mimeType);
+        }
+
+        #endregion
 
         #region Helper Methods
 
