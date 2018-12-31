@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.SessionState;
 using System.Web.UI;
@@ -83,8 +84,19 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
         {
             try
             {
-                var derivedImage = await this.Service.DeriveManipulatedImage(relativePath, originalExtension, imageManipulation);
-                return base.File(derivedImage.FilePath, derivedImage.MimeType);
+                var cache = new Cache();
+                if (cache[Request.RawUrl] == null)
+                {
+                    var derivedImage = await this.Service.DeriveManipulatedImage(relativePath, originalExtension, imageManipulation);
+                    var fileResult = base.File(derivedImage.FilePath, derivedImage.MimeType);
+                    cache.Insert(Request.RawUrl, fileResult);
+
+                    return base.File(derivedImage.FilePath, derivedImage.MimeType);
+                }
+                else
+                {
+                    return cache[Request.RawUrl] as FilePathResult;
+                }
             }
             catch (FileNotFoundException ex)
             {
