@@ -37,6 +37,7 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             base.HttpContext.Response.AppendHeader("Cache-Control", "max-age=2592000");
         }
 
+        [OutputCache(Duration = 300, VaryByParam = "*")]
         public ActionResult Plain(string path)
         {
             if (String.IsNullOrWhiteSpace(path))
@@ -63,12 +64,14 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             throw new HttpException(404, "File not found");
         }
 
+        [OutputCache(Duration = 300, VaryByParam = "*")]
         public async Task<ActionResult> Square(int quality, int width, string path, string originalExtension = null)
         {
             var manipulation = new SquareManipulation(width, quality);
             return await this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
+        [OutputCache(Duration = 300, VaryByParam = "*")]
         public async Task<ActionResult> ResizeToWidth(int quality, int width, string path, string originalExtension = null)
         {
             var manipulation = new ResizeToWidthManipulation(width, quality);
