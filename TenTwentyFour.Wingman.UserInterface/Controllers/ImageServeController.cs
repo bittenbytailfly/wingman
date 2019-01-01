@@ -43,7 +43,6 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
 
             if (System.IO.File.Exists(originPath))
             {
-                base.HttpContext.Response.AppendHeader("Cache-Control", "max-age=2592000");
                 return base.File(originPath, mimeType);
             }
 
