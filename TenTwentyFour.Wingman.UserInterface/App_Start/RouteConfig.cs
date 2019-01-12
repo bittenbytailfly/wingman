@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using TenTwentyFour.Wingman.UserInterface.App_Start;
 using TenTwentyFour.Wingman.UserInterface.ApplicationSettings;
 using TenTwentyFour.Wingman.UserInterface.RouteConstraints;
 
@@ -72,6 +73,7 @@ namespace TenTwentyFour.Wingman.UserInterface
                     defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
                     constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
                 );
+                RegisterFillManipulationRoutes.RegisterRoutes(maxDimensionInt,routes);
             }
 
             routes.MapRoute(
