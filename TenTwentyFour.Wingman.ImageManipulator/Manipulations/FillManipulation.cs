@@ -41,7 +41,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
         public override void Manipulate(string sourceFilePath, string destinationFilePath)
         {
             var backgroundColor = string.IsNullOrWhiteSpace(BackgroundColor) ? default(Color?) : ColorTranslator.FromHtml($"#{BackgroundColor}");
-            base.ResizeImage(sourceFilePath, destinationFilePath, new Size(this.Width, this.Height), ResizeMode.BoxPad, backgroundColor);
+            base.ResizeImage(sourceFilePath, destinationFilePath, new Size(this.Width, this.Height), ResizeMode.Pad, backgroundColor);
         }
     }
 }

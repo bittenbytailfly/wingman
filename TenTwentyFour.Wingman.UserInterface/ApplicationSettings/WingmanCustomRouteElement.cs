@@ -49,5 +49,12 @@ namespace TenTwentyFour.Wingman.UserInterface.ApplicationSettings
             get { return base["originalExtension"] as string; }
             set { base["originalExtension"] = value; }
         }
+
+        [ConfigurationProperty("bgColor", IsRequired = false)]
+        public string BackgroundColour
+        {
+            get { return base["bgColor"] as string; }
+            set { base["bgColor"] = value; }
+        }
     }
 }

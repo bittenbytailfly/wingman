@@ -39,7 +39,7 @@ namespace TenTwentyFour.Wingman.UserInterface
                 routes.MapRoute(
                     name: route.Name,
                     url: $"{route.UriRoot}/{{*path}}",
-                    defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension },
+                    defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension, bgColor = route.BackgroundColour },
                     constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
                 );
             }
@@ -77,7 +77,7 @@ namespace TenTwentyFour.Wingman.UserInterface
                 //Note: bg color should be a hex value eg: FF2D00
                 routes.MapRoute(
                      name: "Fill Width, Quality, Height and BgColor",
-                     url: "derived/fill/{quality}/{width}/{height}/{bgColor}/{*path}",
+                     url: "derived/fill/{quality}/{originalExtension}/{width}/{height}/{bgColor}/{*path}",
                      defaults: new { controller = "ImageServe", action = "Fill" },
                      constraints: new { width = maxImageSizeConstraint, height = maxImageSizeConstraint, bgColor = systemColorConstraint, path = "(.*).(jpg|png|gif|webp)" }
                 );
