@@ -64,9 +64,9 @@ namespace TenTwentyFour.Wingman.ImageManipulator
 
         #region Helper Methods
 
-        private string ReplaceExtension(string path, string originalExtension)
+        private string ReplaceExtension(string path, string extension)
         {
-            return Path.Combine(Path.GetDirectoryName(path), $"{Path.GetFileNameWithoutExtension(path)}.{originalExtension}");
+            return Path.Combine(Path.GetDirectoryName(path), $"{Path.GetFileNameWithoutExtension(path)}.{extension}");
         }
 
         public string GetMimeType(string extension)

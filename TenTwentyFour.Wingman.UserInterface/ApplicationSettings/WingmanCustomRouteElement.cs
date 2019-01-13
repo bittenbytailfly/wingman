@@ -43,11 +43,25 @@ namespace TenTwentyFour.Wingman.UserInterface.ApplicationSettings
             set { base["width"] = value; }
         }
 
+        [ConfigurationProperty("height", IsRequired = false)]
+        public int Height
+        {
+            get { return base["height"] != null ? Convert.ToInt32(base["height"]) : 0; }
+            set { base["height"] = value; }
+        }
+
         [ConfigurationProperty("originalExtension", IsRequired = false)]
         public string OriginalExtension
         {
             get { return base["originalExtension"] as string; }
             set { base["originalExtension"] = value; }
+        }
+
+        [ConfigurationProperty("bgColor", IsRequired = false)]
+        public string BackgroundColour
+        {
+            get { return base["bgColor"] as string; }
+            set { base["bgColor"] = value; }
         }
     }
 }
