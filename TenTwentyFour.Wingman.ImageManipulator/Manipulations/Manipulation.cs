@@ -28,12 +28,12 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
             this.Quality = quality;
         }
 
-        protected void ResizeImage(string sourceFilePath, string destinationFilePath, Size size, ResizeMode mode)
+        protected void ResizeImage(string sourceFilePath, string destinationFilePath, Size size, ResizeMode mode, Color? backgroundColor = null)
         {
             byte[] photoBytes = File.ReadAllBytes(sourceFilePath);
             using (MemoryStream inStream = new MemoryStream(photoBytes))
             {
-                ResizeImage(inStream, destinationFilePath, size, mode);
+                ResizeImage(inStream, destinationFilePath, size, mode, backgroundColor);
             }
         }
 
@@ -45,7 +45,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
 
         #region Helper Methods
 
-        private void ResizeImage(Stream sourceFileStream, string destinationFilePath, Size size, ResizeMode mode)
+        private void ResizeImage(Stream sourceFileStream, string destinationFilePath, Size size, ResizeMode mode,Color? backgroundColor = null)
         {
             ISupportedImageFormat format = GetImageFormat(destinationFilePath, this.Quality);
             using (MemoryStream outStream = new MemoryStream())
@@ -58,9 +58,17 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
                         .AutoRotate()
                         .Load(sourceFileStream);
 
+
                     image.Resize(new ResizeLayer(size, resizeMode: mode))
-                                .Format(format)
-                                .Save(outStream);
+                                .Format(format);
+
+                    //Any padded areas in the output for image formats that do not contain an alpha channel will display as black (the default encoder output). To change this color to another use this option
+                    if (backgroundColor != null)
+                    {
+                        image.BackgroundColor(backgroundColor.Value);
+                    }
+
+                    image.Save(outStream);
                 }
                 // Do something with the stream.
                 var path = Path.GetDirectoryName(destinationFilePath);

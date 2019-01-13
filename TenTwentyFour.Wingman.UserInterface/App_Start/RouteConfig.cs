@@ -31,6 +31,7 @@ namespace TenTwentyFour.Wingman.UserInterface
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             var maxImageSizeConstraint = new MaximumImageSizeConstraint(maxDimensionInt);
+            var systemColorConstraint = new SystemColorConstraint();
 
             var customRouteSection = ConfigurationManager.GetSection("wingmanCustomRoutes") as WingmanRoutesConfigurationSection;
             foreach (WingmanCustomRouteElement route in customRouteSection.CustomRoutes)
@@ -71,6 +72,14 @@ namespace TenTwentyFour.Wingman.UserInterface
                     url: "derived/resize-w/{quality}/{width}/{*path}",
                     defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
                     constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
+                );
+
+                //Note: bg color should be a hex value eg: FF2D00
+                routes.MapRoute(
+                     name: "Fill Width, Quality, Height and BgColor",
+                     url: "derived/fill/{quality}/{width}/{height}/{bgColor}/{*path}",
+                     defaults: new { controller = "ImageServe", action = "Fill" },
+                     constraints: new { width = maxImageSizeConstraint, height = maxImageSizeConstraint, bgColor = systemColorConstraint, path = "(.*).(jpg|png|gif|webp)" }
                 );
             }
 

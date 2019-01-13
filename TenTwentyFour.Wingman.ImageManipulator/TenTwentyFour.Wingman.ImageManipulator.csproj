@@ -51,6 +51,7 @@
       <SubType>Designer</SubType>
     </None>
     <Compile Include="ManipulationService.cs" />
+    <Compile Include="Manipulations\FillManipulation.cs" />
     <Compile Include="Manipulations\Manipulation.cs" />
     <Compile Include="Manipulations\ResizeToWidthManipulation.cs" />
     <Compile Include="Manipulations\SquareManipulation.cs" />
