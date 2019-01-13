@@ -31,7 +31,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
             }
         }
 
-        public FillManipulation(int width, int height, int quality,string backgroundColor= null) : base(quality)
+        public FillManipulation(int width, int height, int quality, string backgroundColor = null) : base(quality)
         {
             this.Width = width;
             this.Height = height;

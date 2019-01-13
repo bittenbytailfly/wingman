@@ -7,11 +7,7 @@ namespace TenTwentyFour.Wingman.UserInterface.RouteConstraints
 {
     public class SystemColorConstraint : IRouteConstraint
     {
-       
-        public SystemColorConstraint()
-        {
-          
-        }
+        public SystemColorConstraint() {}
 
         public bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
         {
