@@ -61,10 +61,10 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
-        public ActionResult Fill(int quality, int width, string path, int height=0, string bgColor=null)
+        public ActionResult Fill(int quality, int width, string path, string originalExtension = null, int height = 0, string bgColor = null)
         {
             var manipulation = new FillManipulation(width, height, quality, bgColor);
-            return this.ServeManipulatedImage(path, null, manipulation);
+            return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
         #region Helper Methods
