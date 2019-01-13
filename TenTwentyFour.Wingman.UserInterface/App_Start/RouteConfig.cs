@@ -39,7 +39,7 @@ namespace TenTwentyFour.Wingman.UserInterface
                 routes.MapRoute(
                     name: route.Name,
                     url: $"{route.UriRoot}/{{*path}}",
-                    defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension, bgColor = route.BackgroundColour },
+                    defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension, bgColor = route.BackgroundColour, height = route.Height },
                     constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
                 );
             }

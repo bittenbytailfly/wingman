@@ -43,6 +43,13 @@ namespace TenTwentyFour.Wingman.UserInterface.ApplicationSettings
             set { base["width"] = value; }
         }
 
+        [ConfigurationProperty("height", IsRequired = false)]
+        public int Height
+        {
+            get { return base["height"] != null ? Convert.ToInt32(base["height"]) : 0; }
+            set { base["height"] = value; }
+        }
+
         [ConfigurationProperty("originalExtension", IsRequired = false)]
         public string OriginalExtension
         {
