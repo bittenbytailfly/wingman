@@ -64,37 +64,40 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
-        public ActionResult ResizeToWidth(int quality, int width, string path, string originalExtension = null)
+        public ActionResult ResizeToWidth(int quality, int rotationDegrees, int width, string path, string originalExtension = null)
         {
             var manipulation = new Manipulation
             {
                 Quality = quality,
                 Width = width,
-                ResizeMode = ResizeMode.Max
+                ResizeMode = ResizeMode.Max,
+                RotationDegrees = rotationDegrees
             };
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
-        public ActionResult Crop(int quality, int width, int height, string path, string originalExtension = null)
+        public ActionResult Crop(int quality, int rotationDegrees, int width, int height, string path, string originalExtension = null)
         {
             var manipulation = new Manipulation
             {
                 Quality = quality,
                 Width = width,
                 Height = height,
-                ResizeMode = ResizeMode.Crop
+                ResizeMode = ResizeMode.Crop,
+                RotationDegrees = rotationDegrees
             };
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
-        public ActionResult Fill(int quality, int width, int height, string path, string originalExtension = null, string bgColor = null)
+        public ActionResult Fill(int quality, int rotationDegrees, int width, int height, string path, string originalExtension = null, string bgColor = null)
         {
             var manipulation = new Manipulation
             {
                 Quality = quality,
                 Width = width,
                 Height = height,
-                ResizeMode = ResizeMode.Pad
+                ResizeMode = ResizeMode.Pad,
+                RotationDegrees = rotationDegrees
             };
             if (bgColor != null)
             {

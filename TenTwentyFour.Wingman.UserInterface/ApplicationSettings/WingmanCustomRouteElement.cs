@@ -36,7 +36,7 @@ namespace TenTwentyFour.Wingman.UserInterface.ApplicationSettings
             set { base["quality"] = value; }
         }
 
-        [ConfigurationProperty("width", IsRequired = true)]
+        [ConfigurationProperty("width", IsRequired = false)]
         public int Width
         {
             get { return Convert.ToInt32(base["width"]); }
@@ -62,6 +62,13 @@ namespace TenTwentyFour.Wingman.UserInterface.ApplicationSettings
         {
             get { return base["bgColor"] as string; }
             set { base["bgColor"] = value; }
+        }
+
+        [ConfigurationProperty("rotationDegrees", IsRequired = false)]
+        public int RotationDegrees
+        {
+            get { return base["rotationDegrees"] != null ? Convert.ToInt32(base["rotationDegrees"]) : 0; }
+            set { base["rotationDegrees"] = value; }
         }
     }
 }
