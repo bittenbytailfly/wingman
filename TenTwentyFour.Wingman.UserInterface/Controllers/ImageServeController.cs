@@ -74,7 +74,19 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
-        public ActionResult Fill(int quality, int width, string path, string originalExtension = null, int height = 0, string bgColor = null)
+        public ActionResult Crop(int quality, int width, int height, string path, string originalExtension = null)
+        {
+            var manipulation = new Manipulation
+            {
+                Quality = quality,
+                Width = width,
+                Height = height,
+                ResizeMode = ResizeMode.Crop
+            };
+            return this.ServeManipulatedImage(path, originalExtension, manipulation);
+        }
+
+        public ActionResult Fill(int quality, int width, int height, string path, string originalExtension = null, string bgColor = null)
         {
             var manipulation = new Manipulation
             {

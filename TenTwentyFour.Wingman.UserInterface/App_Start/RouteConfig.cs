@@ -74,6 +74,13 @@ namespace TenTwentyFour.Wingman.UserInterface
                     constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
                 );
 
+                routes.MapRoute(
+                     name: "Centre Crop with no filling",
+                     url: "derived/crop/{quality}/{originalExtension}/{width}/{height}/{*path}",
+                     defaults: new { controller = "ImageServe", action = "Crop" },
+                     constraints: new { width = maxImageSizeConstraint, height = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
+                );
+
                 //Note: bg color should be a hex value eg: FF2D00
                 routes.MapRoute(
                      name: "Fill Width, Quality, Height and BgColor",
