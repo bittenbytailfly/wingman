@@ -52,7 +52,6 @@
     </None>
     <Compile Include="ManipulationService.cs" />
     <Compile Include="Manipulations\Manipulation.cs" />
-    <Compile Include="Manipulations\ManipulationArguments.cs" />
     <Compile Include="Models\ImageDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

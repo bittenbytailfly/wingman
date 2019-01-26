@@ -40,7 +40,7 @@ namespace TenTwentyFour.Wingman.UserInterface
                     name: route.Name,
                     url: $"{route.UriRoot}/{{*path}}",
                     defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension, bgColor = route.BackgroundColour, height = route.Height },
-                    constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
+                    constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp", rotationDegrees = "0|90|180|270" }
                 );
             }
 
@@ -48,45 +48,45 @@ namespace TenTwentyFour.Wingman.UserInterface
             {
                 routes.MapRoute(
                     name: "Crop Square With Format Change",
-                    url: "derived/square/{quality}/{originalExtension}/{width}/{*path}",
+                    url: "derived/square/{quality}/{rotationdegrees}/{originalExtension}/{width}/{*path}",
                     defaults: new { controller = "ImageServe", action = "Square" },
-                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
+                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp", rotationDegrees = "0|90|180|270" }
                 );
 
                 routes.MapRoute(
                    name: "Crop Square",
-                   url: "derived/square/{quality}/{width}/{*path}",
+                   url: "derived/square/{quality}/{rotationdegrees}/{width}/{*path}",
                    defaults: new { controller = "ImageServe", action = "Square" },
-                   constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
+                   constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", rotationDegrees = "0|90|180|270" }
                );
 
                 routes.MapRoute(
                     name: "Resize Width With Format Change",
-                    url: "derived/resize-w/{quality}/{originalExtension}/{width}/{*path}",
+                    url: "derived/resize-w/{quality}/{rotationdegrees}/{originalExtension}/{width}/{*path}",
                     defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
-                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp" }
+                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp", rotationDegrees = "0|90|180|270" }
                 );
 
                 routes.MapRoute(
                     name: "Resize Width",
-                    url: "derived/resize-w/{quality}/{width}/{*path}",
+                    url: "derived/resize-w/{quality}/{rotationdegrees}/{width}/{*path}",
                     defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
-                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
+                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", rotationDegrees = "0|90|180|270" }
                 );
 
                 routes.MapRoute(
                      name: "Centre Crop with no filling",
-                     url: "derived/crop/{quality}/{originalExtension}/{width}/{height}/{*path}",
+                     url: "derived/crop/{quality}/{rotationdegrees}/{originalExtension}/{width}/{height}/{*path}",
                      defaults: new { controller = "ImageServe", action = "Crop" },
-                     constraints: new { width = maxImageSizeConstraint, height = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)" }
+                     constraints: new { width = maxImageSizeConstraint, height = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", rotationDegrees = "0|90|180|270" }
                 );
 
                 //Note: bg color should be a hex value eg: FF2D00
                 routes.MapRoute(
                      name: "Fill Width, Quality, Height and BgColor",
-                     url: "derived/fill/{quality}/{originalExtension}/{width}/{height}/{bgColor}/{*path}",
+                     url: "derived/fill/{quality}/{rotationdegrees}/{originalExtension}/{width}/{height}/{bgColor}/{*path}",
                      defaults: new { controller = "ImageServe", action = "Fill" },
-                     constraints: new { width = maxImageSizeConstraint, height = maxImageSizeConstraint, bgColor = systemColorConstraint, path = "(.*).(jpg|png|gif|webp)" }
+                     constraints: new { width = maxImageSizeConstraint, height = maxImageSizeConstraint, bgColor = systemColorConstraint, path = "(.*).(jpg|png|gif|webp)", rotationDegrees = "0|90|180|270" }
                 );
             }
 
