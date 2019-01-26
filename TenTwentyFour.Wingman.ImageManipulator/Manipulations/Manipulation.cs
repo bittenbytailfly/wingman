@@ -12,20 +12,31 @@ using System.Threading.Tasks;
 
 namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
 {
-    public abstract class Manipulation
+    public class Manipulation
     {
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public Color BackgroundColor { get; set; }
+        public ResizeMode ResizeMode { get; set; }
         public int Quality { get; set; }
-        
-        public abstract void Manipulate(string sourceFilePath, string destinationFilePath);
 
-        /// <summary>
-        /// Recommended to use Manipulation name + properties (e.g. "square_200")
-        /// </summary>
-        protected abstract string ManipulatedFileNameWithoutExtension { get; }
-
-        public Manipulation(int quality)
+        public string Key
         {
-            this.Quality = quality;
+            get { return $"q{this.Quality}_w{this.Width}_h{this.Height}_bgc{this.BackgroundColor.ToString().ToLower()}_rm{this.ResizeMode.ToString().ToLower()}"; }
+        }
+
+        public Manipulation()
+        {
+            this.Width = 0;
+            this.Height = 0;
+            this.BackgroundColor = Color.Empty;
+            this.ResizeMode = ResizeMode.Max;
+            this.Quality = 80;
+        }
+        
+        public void Manipulate(string sourceFilePath, string destinationFilePath)
+        {
+            this.ResizeImage(sourceFilePath, destinationFilePath, new Size(this.Width, this.Height), this.ResizeMode, this.BackgroundColor);
         }
 
         protected void ResizeImage(string sourceFilePath, string destinationFilePath, Size size, ResizeMode mode, Color? backgroundColor = null)
@@ -40,7 +51,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
         public string GetDerivedFileName(string filePath)
         {
             var fileExtension = Path.GetExtension(filePath);
-            return $"{this.ManipulatedFileNameWithoutExtension}_q{this.Quality}{fileExtension}";
+            return $"{this.Key}{fileExtension}";
         }
 
         #region Helper Methods

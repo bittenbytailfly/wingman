@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ImageProcessor.Imaging;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -51,19 +53,40 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
 
         public ActionResult Square(int quality, int width, string path, string originalExtension = null)
         {
-            var manipulation = new SquareManipulation(width, quality);
+            var manipulation = new Manipulation
+            {
+                Quality = quality,
+                Width = width,
+                Height = width,
+                ResizeMode = ResizeMode.Crop
+            };
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
         public ActionResult ResizeToWidth(int quality, int width, string path, string originalExtension = null)
         {
-            var manipulation = new ResizeToWidthManipulation(width, quality);
+            var manipulation = new Manipulation
+            {
+                Quality = quality,
+                Width = width,
+                ResizeMode = ResizeMode.Max
+            };
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
         public ActionResult Fill(int quality, int width, string path, string originalExtension = null, int height = 0, string bgColor = null)
         {
-            var manipulation = new FillManipulation(width, height, quality, bgColor);
+            var manipulation = new Manipulation
+            {
+                Quality = quality,
+                Width = width,
+                Height = height,
+                ResizeMode = ResizeMode.Pad
+            };
+            if (bgColor != null)
+            {
+                manipulation.BackgroundColor = ColorTranslator.FromHtml($"#{bgColor}");
+            }
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
