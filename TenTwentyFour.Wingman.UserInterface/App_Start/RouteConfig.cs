@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Routing.Constraints;
 using System.Web.Routing;
 using TenTwentyFour.Wingman.UserInterface.ApplicationSettings;
 using TenTwentyFour.Wingman.UserInterface.RouteConstraints;
@@ -16,77 +17,29 @@ namespace TenTwentyFour.Wingman.UserInterface
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            var maxDimensionInt = 500;
-            var maxDimension = ConfigurationManager.AppSettings["MaximumImageDimension"];
-            if (maxDimension == null)
-            {
-                throw new ConfigurationErrorsException("You must specify a key for MaximumImageDimension");
-            }
-
-            if (!Int32.TryParse(maxDimension, out maxDimensionInt))
-            {
-                throw new ConfigurationErrorsException("You must specify a valid integer for MaximumImageDimension");
-            }
-
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            var maxImageSizeConstraint = new MaximumImageSizeConstraint(maxDimensionInt);
+            var customRouteSection = ConfigurationManager.GetSection("wingmanCustomRoutes") as WingmanRoutesConfigurationSection;
+            var maxImageSizeConstraint = new MaximumImageSizeConstraint(customRouteSection.MaxImageDimension);
             var systemColorConstraint = new SystemColorConstraint();
 
-            var customRouteSection = ConfigurationManager.GetSection("wingmanCustomRoutes") as WingmanRoutesConfigurationSection;
             foreach (WingmanCustomRouteElement route in customRouteSection.CustomRoutes)
             {
+                var bgConstraint = route.UriRoot.Contains("{bgColor}") || !String.IsNullOrWhiteSpace(route.BackgroundColour)
+                    ? (IRouteConstraint)new SystemColorConstraint()
+                    : new RegexRouteConstraint("(.*)?");
+
+                var widthConstraint = !String.IsNullOrWhiteSpace(route.AllowedWidths)
+                    ? (IRouteConstraint)new RegexRouteConstraint(route.AllowedWidths.Replace(",", "|"))
+                    : maxImageSizeConstraint;
+
+                var heightConstraint = !String.IsNullOrWhiteSpace(route.AllowedHeights)
+                    ? (IRouteConstraint)new RegexRouteConstraint(route.AllowedHeights.Replace(",", "|"))
+                    : maxImageSizeConstraint;
+
                 routes.MapRoute(
                     name: route.Name,
                     url: $"{route.UriRoot}/{{*path}}",
                     defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension, bgColor = route.BackgroundColour, height = route.Height, rotationDegrees = route.RotationDegrees },
-                    constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp", rotationDegrees = "0|90|180|270" }
-                );
-            }
-
-            if (!customRouteSection.DisableDefaultRouting)
-            {
-                routes.MapRoute(
-                    name: "Crop Square With Format Change",
-                    url: "derived/square/{quality}/{rotationdegrees}/{originalExtension}/{width}/{*path}",
-                    defaults: new { controller = "ImageServe", action = "Square" },
-                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp", rotationDegrees = "0|90|180|270" }
-                );
-
-                routes.MapRoute(
-                   name: "Crop Square",
-                   url: "derived/square/{quality}/{rotationdegrees}/{width}/{*path}",
-                   defaults: new { controller = "ImageServe", action = "Square" },
-                   constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", rotationDegrees = "0|90|180|270" }
-               );
-
-                routes.MapRoute(
-                    name: "Resize Width With Format Change",
-                    url: "derived/resize-w/{quality}/{rotationdegrees}/{originalExtension}/{width}/{*path}",
-                    defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
-                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp", rotationDegrees = "0|90|180|270" }
-                );
-
-                routes.MapRoute(
-                    name: "Resize Width",
-                    url: "derived/resize-w/{quality}/{rotationdegrees}/{width}/{*path}",
-                    defaults: new { controller = "ImageServe", action = "ResizeToWidth" },
-                    constraints: new { width = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", rotationDegrees = "0|90|180|270" }
-                );
-
-                routes.MapRoute(
-                     name: "Centre Crop with no filling",
-                     url: "derived/crop/{quality}/{rotationdegrees}/{originalExtension}/{width}/{height}/{*path}",
-                     defaults: new { controller = "ImageServe", action = "Crop" },
-                     constraints: new { width = maxImageSizeConstraint, height = maxImageSizeConstraint, path = "(.*).(jpg|png|gif|webp)", rotationDegrees = "0|90|180|270" }
-                );
-
-                //Note: bg color should be a hex value eg: FF2D00
-                routes.MapRoute(
-                     name: "Fill Width, Quality, Height and BgColor",
-                     url: "derived/fill/{quality}/{rotationdegrees}/{originalExtension}/{width}/{height}/{bgColor}/{*path}",
-                     defaults: new { controller = "ImageServe", action = "Fill" },
-                     constraints: new { width = maxImageSizeConstraint, height = maxImageSizeConstraint, bgColor = systemColorConstraint, path = "(.*).(jpg|png|gif|webp)", rotationDegrees = "0|90|180|270" }
+                    constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp", rotationDegrees = "0|90|180|270", width = widthConstraint, height = heightConstraint }
                 );
             }
 

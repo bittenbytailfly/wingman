@@ -70,5 +70,19 @@ namespace TenTwentyFour.Wingman.UserInterface.ApplicationSettings
             get { return base["rotationDegrees"] != null ? Convert.ToInt32(base["rotationDegrees"]) : 0; }
             set { base["rotationDegrees"] = value; }
         }
+
+        [ConfigurationProperty("allowedWidths", IsRequired = false)]
+        public string AllowedWidths
+        {
+            get { return base["allowedWidths"] as string; }
+            set { base["allowedWidths"] = value; }
+        }
+
+        [ConfigurationProperty("allowedHeights", IsRequired = false)]
+        public string AllowedHeights
+        {
+            get { return base["allowedHeights"] as string; }
+            set { base["allowedHeights"] = value; }
+        }
     }
 }
