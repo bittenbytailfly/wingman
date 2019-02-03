@@ -27,6 +27,10 @@ namespace TenTwentyFour.Wingman.UserInterface
                     ? (IRouteConstraint)new SystemColorConstraint()
                     : new RegexRouteConstraint("(.*)?");
 
+                var originalExtensionConstraint = route.UriRoot.Contains("{originalExtension}") || !String.IsNullOrWhiteSpace(route.OriginalExtension)
+                    ? (IRouteConstraint)new RegexRouteConstraint("jpg|png|gif|webp")
+                    : new RegexRouteConstraint("(.*)?");
+
                 var widthConstraint = !String.IsNullOrWhiteSpace(route.AllowedWidths)
                     ? (IRouteConstraint)new RegexRouteConstraint(route.AllowedWidths.Replace(",", "|"))
                     : maxImageSizeConstraint;
@@ -39,7 +43,7 @@ namespace TenTwentyFour.Wingman.UserInterface
                     name: route.Name,
                     url: $"{route.UriRoot}/{{*path}}",
                     defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension, bgColor = route.BackgroundColour, height = route.Height, rotationDegrees = route.RotationDegrees },
-                    constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = "jpg|png|gif|webp", rotationDegrees = "0|90|180|270", width = widthConstraint, height = heightConstraint }
+                    constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = originalExtensionConstraint, rotationDegrees = "0|90|180|270", width = widthConstraint, height = heightConstraint }
                 );
             }
 

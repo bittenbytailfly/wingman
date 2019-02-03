@@ -89,7 +89,7 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             return this.ServeManipulatedImage(path, originalExtension, manipulation);
         }
 
-        public ActionResult Fill(int quality, int rotationDegrees, int width, int height, string path, string originalExtension = null, string bgColor = null)
+        public ActionResult Pad(int quality, int rotationDegrees, int width, int height, string path, string originalExtension = null, string bgColor = null)
         {
             var manipulation = new Manipulation
             {
@@ -99,7 +99,7 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
                 ResizeMode = ResizeMode.Pad,
                 RotationDegrees = rotationDegrees
             };
-            if (bgColor != null)
+            if (!String.IsNullOrWhiteSpace(bgColor))
             {
                 manipulation.BackgroundColor = ColorTranslator.FromHtml($"#{bgColor}");
             }
