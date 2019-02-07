@@ -28,7 +28,7 @@ namespace TenTwentyFour.Wingman.UserInterface.RouteConstraints
                 return false;
             }
 
-            return requestedImageSize > 0 && requestedImageSize <= this.MaximumImageSize;
+            return requestedImageSize >= 0 && requestedImageSize <= this.MaximumImageSize;
         }
     }
 }

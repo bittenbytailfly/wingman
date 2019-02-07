@@ -8,11 +8,11 @@ namespace TenTwentyFour.Wingman.UserInterface.ApplicationSettings
 {
     public class WingmanRoutesConfigurationSection : ConfigurationSection
     {
-        [ConfigurationProperty("disableDefaultRouting", IsRequired = true)]
-        public bool DisableDefaultRouting
+        [ConfigurationProperty("maxImageDimension", IsRequired = true)]
+        public int MaxImageDimension
         {
-            get { return (bool)base["disableDefaultRouting"]; }
-            set { base["disableDefaultRouting"] = value; }
+            get { return (int)base["maxImageDimension"]; }
+            set { base["maxImageDimension"] = value; }
         }
 
         [ConfigurationProperty("", IsRequired = true, IsDefaultCollection = true)]

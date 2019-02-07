@@ -12,40 +12,55 @@ using System.Threading.Tasks;
 
 namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
 {
-    public abstract class Manipulation
+    public class Manipulation
     {
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public Color BackgroundColor { get; set; }
+        public ResizeMode ResizeMode { get; set; }
         public int Quality { get; set; }
-        
-        public abstract void Manipulate(string sourceFilePath, string destinationFilePath);
+        public int RotationDegrees { get; set; }
 
-        /// <summary>
-        /// Recommended to use Manipulation name + properties (e.g. "square_200")
-        /// </summary>
-        protected abstract string ManipulatedFileNameWithoutExtension { get; }
-
-        public Manipulation(int quality)
+        public string Key
         {
-            this.Quality = quality;
+            get {
+                string colorHex = this.BackgroundColor.R.ToString("X2") + this.BackgroundColor.G.ToString("X2") + this.BackgroundColor.B.ToString("X2");
+                return $"q{this.Quality}_w{this.Width}_h{this.Height}_bgc{colorHex.ToLower()}_rm{this.ResizeMode.ToString().ToLower()}_ra{this.RotationDegrees}"; }
         }
 
-        protected void ResizeImage(string sourceFilePath, string destinationFilePath, Size size, ResizeMode mode, Color? backgroundColor = null)
+        public Manipulation()
+        {
+            this.Width = 0;
+            this.Height = 0;
+            this.BackgroundColor = Color.Empty;
+            this.ResizeMode = ResizeMode.Max;
+            this.Quality = 80;
+            this.RotationDegrees = 0;
+        }
+        
+        public void Manipulate(string sourceFilePath, string destinationFilePath)
+        {
+            this.ResizeImage(sourceFilePath, destinationFilePath, new Size(this.Width, this.Height), this.ResizeMode, this.BackgroundColor, this.RotationDegrees);
+        }
+
+        protected void ResizeImage(string sourceFilePath, string destinationFilePath, Size size, ResizeMode mode, Color backgroundColor, int rotationDegrees)
         {
             byte[] photoBytes = File.ReadAllBytes(sourceFilePath);
             using (MemoryStream inStream = new MemoryStream(photoBytes))
             {
-                ResizeImage(inStream, destinationFilePath, size, mode, backgroundColor);
+                ResizeImage(inStream, destinationFilePath, size, mode, backgroundColor, rotationDegrees);
             }
         }
 
         public string GetDerivedFileName(string filePath)
         {
             var fileExtension = Path.GetExtension(filePath);
-            return $"{this.ManipulatedFileNameWithoutExtension}_q{this.Quality}{fileExtension}";
+            return $"{this.Key}{fileExtension}";
         }
 
         #region Helper Methods
 
-        private void ResizeImage(Stream sourceFileStream, string destinationFilePath, Size size, ResizeMode mode,Color? backgroundColor = null)
+        private void ResizeImage(Stream sourceFileStream, string destinationFilePath, Size size, ResizeMode mode, Color backgroundColor, int rotationDegrees)
         {
             ISupportedImageFormat format = GetImageFormat(destinationFilePath, this.Quality);
             using (MemoryStream outStream = new MemoryStream())
@@ -56,20 +71,14 @@ namespace TenTwentyFour.Wingman.ImageManipulator.Manipulations
                     // Load, resize, set the format and quality and save an image.
                     var image = imageFactory
                         .AutoRotate()
-                        .Load(sourceFileStream);
-
-
-                    image.Resize(new ResizeLayer(size, resizeMode: mode))
-                                .Format(format);
-
-                    //Any padded areas in the output for image formats that do not contain an alpha channel will display as black (the default encoder output). To change this color to another use this option
-                    if (backgroundColor != null)
-                    {
-                        image.BackgroundColor(backgroundColor.Value);
-                    }
-
-                    image.Save(outStream);
+                        .Load(sourceFileStream)
+                        .Rotate(rotationDegrees)
+                        .Resize(new ResizeLayer(size, resizeMode: mode))
+                        .Format(format)
+                        .BackgroundColor(backgroundColor)
+                        .Save(outStream);
                 }
+
                 // Do something with the stream.
                 var path = Path.GetDirectoryName(destinationFilePath);
                 if (!Directory.Exists(path))
