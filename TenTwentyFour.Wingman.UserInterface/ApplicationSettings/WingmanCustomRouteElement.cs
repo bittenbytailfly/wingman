@@ -29,7 +29,7 @@ namespace TenTwentyFour.Wingman.UserInterface.ApplicationSettings
             set { base["manipulation"] = value; }
         }
 
-        [ConfigurationProperty("quality", IsRequired = true)]
+        [ConfigurationProperty("quality", IsRequired = false)]
         public int Quality
         {
             get { return Convert.ToInt32(base["quality"]); }
