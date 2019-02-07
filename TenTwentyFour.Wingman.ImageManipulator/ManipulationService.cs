@@ -25,7 +25,7 @@ namespace TenTwentyFour.Wingman.ImageManipulator
             var derivedFileName = imageManipulation.GetDerivedFileName(relativePath);
             var mimeType = GetMimeType(Path.GetExtension(relativePath));
 
-            if (originalExtension != null)
+            if (!String.IsNullOrWhiteSpace(originalExtension))
             {
                 relativePath = ReplaceExtension(relativePath, originalExtension);
             }
