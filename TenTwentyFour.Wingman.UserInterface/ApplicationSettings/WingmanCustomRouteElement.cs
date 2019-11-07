@@ -84,5 +84,12 @@ namespace TenTwentyFour.Wingman.UserInterface.ApplicationSettings
             get { return base["allowedHeights"] as string; }
             set { base["allowedHeights"] = value; }
         }
+
+        [ConfigurationProperty("pathPrefix", IsRequired = false)]
+        public string PathPrefix
+        {
+            get { return base["pathPrefix"] as string; }
+            set { base["pathPrefix"] = value; }
+        }
     }
 }
