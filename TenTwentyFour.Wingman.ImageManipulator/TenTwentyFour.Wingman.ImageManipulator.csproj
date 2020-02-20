@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImageProcessor, Version=2.7.0.100, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ImageProcessor.2.7.0.100\lib\net452\ImageProcessor.dll</HintPath>
+    <Reference Include="ImageProcessor, Version=2.8.0.152, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.2.8.0\lib\net452\ImageProcessor.dll</HintPath>
     </Reference>
     <Reference Include="ImageProcessor.Plugins.WebP, Version=1.2.0.100, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageProcessor.Plugins.WebP.1.2.0.100\lib\net452\ImageProcessor.Plugins.WebP.dll</HintPath>
