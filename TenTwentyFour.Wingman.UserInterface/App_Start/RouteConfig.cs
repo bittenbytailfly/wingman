@@ -42,7 +42,7 @@ namespace TenTwentyFour.Wingman.UserInterface
                 routes.MapRoute(
                     name: route.Name,
                     url: $"{route.UriRoot}/{{*path}}",
-                    defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension, bgColor = route.BackgroundColour, height = route.Height, rotationDegrees = route.RotationDegrees },
+                    defaults: new { controller = "ImageServe", action = route.Manipulation, quality = route.Quality, width = route.Width, originalExtension = route.OriginalExtension, bgColor = route.BackgroundColour, height = route.Height, rotationDegrees = route.RotationDegrees, pathPrefix = route.PathPrefix },
                     constraints: new { path = "(.*).(jpg|png|gif|webp)", originalExtension = originalExtensionConstraint, rotationDegrees = "0|90|180|270", width = widthConstraint, height = heightConstraint }
                 );
             }
