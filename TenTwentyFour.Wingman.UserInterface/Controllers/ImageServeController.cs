@@ -51,7 +51,7 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             throw new HttpException(404, "File not found");
         }
 
-        public ActionResult Square(int quality, int rotationDegrees, int width, string path, string originalExtension = null)
+        public ActionResult Square(int quality, int rotationDegrees, int width, string pathPrefix, string path, string originalExtension = null)
         {
             var manipulation = new Manipulation
             {
@@ -61,10 +61,13 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
                 ResizeMode = ResizeMode.Crop,
                 RotationDegrees = rotationDegrees
             };
-            return this.ServeManipulatedImage(path, originalExtension, manipulation);
+            var relativePath = String.IsNullOrWhiteSpace(pathPrefix)
+                ? path
+                : pathPrefix + "/" + path;
+            return this.ServeManipulatedImage(relativePath, originalExtension, manipulation);
         }
 
-        public ActionResult ResizeToWidth(int quality, int rotationDegrees, int width, string path, string originalExtension = null)
+        public ActionResult ResizeToWidth(int quality, int rotationDegrees, int width, string pathPrefix, string path, string originalExtension = null)
         {
             var manipulation = new Manipulation
             {
@@ -73,10 +76,13 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
                 ResizeMode = ResizeMode.Max,
                 RotationDegrees = rotationDegrees
             };
-            return this.ServeManipulatedImage(path, originalExtension, manipulation);
+            var relativePath = String.IsNullOrWhiteSpace(pathPrefix)
+                ? path
+                : pathPrefix + "/" + path;
+            return this.ServeManipulatedImage(relativePath, originalExtension, manipulation);
         }
 
-        public ActionResult Crop(int quality, int rotationDegrees, int width, int height, string path, string originalExtension = null)
+        public ActionResult Crop(int quality, int rotationDegrees, int width, int height, string pathPrefix, string path, string originalExtension = null)
         {
             var manipulation = new Manipulation
             {
@@ -86,10 +92,13 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
                 ResizeMode = ResizeMode.Crop,
                 RotationDegrees = rotationDegrees
             };
-            return this.ServeManipulatedImage(path, originalExtension, manipulation);
+            var relativePath = String.IsNullOrWhiteSpace(pathPrefix)
+                ? path
+                : pathPrefix + "/" + path;
+            return this.ServeManipulatedImage(relativePath, originalExtension, manipulation);
         }
 
-        public ActionResult Pad(int quality, int rotationDegrees, int width, int height, string path, string originalExtension = null, string bgColor = null)
+        public ActionResult Pad(int quality, int rotationDegrees, int width, int height, string pathPrefix, string path, string originalExtension = null, string bgColor = null)
         {
             var manipulation = new Manipulation
             {
@@ -103,7 +112,10 @@ namespace TenTwentyFour.Wingman.UserInterface.Controllers
             {
                 manipulation.BackgroundColor = ColorTranslator.FromHtml($"#{bgColor}");
             }
-            return this.ServeManipulatedImage(path, originalExtension, manipulation);
+            var relativePath = String.IsNullOrWhiteSpace(pathPrefix)
+                 ? path
+                 : pathPrefix + "/" + path;
+            return this.ServeManipulatedImage(relativePath, originalExtension, manipulation);
         }
 
         #region Helper Methods
